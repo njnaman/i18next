@@ -19,23 +19,23 @@ export default class EventEmitter implements EventEmitterInterface {
     this.observers = {};
   }
 
-  on(events: string, listener: EventListener): this {
+  on<T extends unknown[] = unknown[]>(events: string, listener: EventListener<T>): this {
     events.split(' ').forEach(event => {
       if (!this.observers[event]) this.observers[event] = new Map();
-      const numListeners = this.observers[event]!.get(listener) || 0;
-      this.observers[event]!.set(listener, numListeners + 1);
+      const numListeners = this.observers[event]!.get(listener as EventListener) || 0;
+      this.observers[event]!.set(listener as EventListener, numListeners + 1);
     });
     return this;
   }
 
-  off(event: string, listener?: EventListener): void {
+  off<T extends unknown[] = unknown[]>(event: string, listener?: EventListener<T>): void {
     if (!this.observers[event]) return;
     if (!listener) {
       delete this.observers[event];
       return;
     }
 
-    this.observers[event]!.delete(listener);
+    this.observers[event]!.delete(listener as EventListener);
   }
 
   emit(event: string, ...args: unknown[]): void {

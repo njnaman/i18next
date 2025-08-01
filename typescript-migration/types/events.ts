@@ -13,9 +13,9 @@ export interface EventObservers {
 export interface EventEmitterInterface {
   observers: EventObservers;
 
-  on(events: string, listener: EventListener): this;
+  on<T extends unknown[] = unknown[]>(events: string, listener: EventListener<T>): this;
 
-  off(event: string, listener?: EventListener): void;
+  off<T extends unknown[] = unknown[]>(event: string, listener?: EventListener<T>): void;
 
   emit(event: string, ...args: unknown[]): void;
 }
