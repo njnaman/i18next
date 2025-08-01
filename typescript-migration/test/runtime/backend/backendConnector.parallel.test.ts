@@ -3,11 +3,12 @@ import BackendConnector from '../../../src/BackendConnector';
 import Interpolator from '../../../src/Interpolator';
 import ResourceStore from '../../../src/ResourceStore';
 import BackendMock from './backendMockSleepy';
+import type { Services } from '../../../types';
 
 describe('BackendConnector with sleepy backend', () => {
   describe('#load', () => {
     describe('10 max parallel', () => {
-      let connector;
+      let connector: BackendConnector;
 
       beforeEach(() => {
         connector = new BackendConnector(
@@ -15,7 +16,7 @@ describe('BackendConnector with sleepy backend', () => {
           new ResourceStore(),
           {
             interpolator: new Interpolator(),
-          },
+          } as Services,
           {
             maxParallelReads: 10,
             backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
@@ -44,7 +45,7 @@ describe('BackendConnector with sleepy backend', () => {
 
     describe('100 max parallel', () => {
       /** @type {BackendConnector} */
-      let connector;
+      let connector: BackendConnector;
 
       beforeEach(() => {
         connector = new BackendConnector(
@@ -52,7 +53,7 @@ describe('BackendConnector with sleepy backend', () => {
           new ResourceStore(),
           {
             interpolator: new Interpolator(),
-          },
+          } as Services,
           {
             maxParallelReads: 100,
             backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },

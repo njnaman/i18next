@@ -59,7 +59,7 @@ function removePending(q: QueueItem, name: string): void {
 }
 
 class BackendConnector extends EventEmitter {
-  public backend: BackendModule | null;
+  public backend: BackendModule;
   public store: ResourceStore;
   public services: Services;
   public languageUtils: LanguageUtils;
@@ -75,7 +75,7 @@ class BackendConnector extends EventEmitter {
   public queue: QueueItem[];
 
   constructor(
-    backend: BackendModule | null,
+    backend: BackendModule,
     store: ResourceStore,
     services: Services,
     options: InitOptions = {},
