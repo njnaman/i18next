@@ -207,14 +207,17 @@ export interface BackendModule extends BaseModule {
     options?: Record<string, unknown>,
   ): void;
 
-  readMulti?(languages: Language[], namespaces: Namespace[], callback: MultiReadCallback): void;
+  readMulti?(languages: Language[], namespaces: Namespace[], callback: ReadCallback): void;
 
   save?(language: Language, namespace: Namespace, data: ResourceLanguage): void;
 }
 
 // Callback types
 export type ReadCallback = (error: string | null, data: ResourceLanguage | boolean | null) => void;
-export type MultiReadCallback = (error: string | null, data: Resource | null) => void;
+export type MultiReadCallback = (
+  error: string | null,
+  data: ResourceLanguage | boolean | null,
+) => void;
 
 // Plural rule type
 export type PluralRule = (count: number, ordinal?: boolean) => number;

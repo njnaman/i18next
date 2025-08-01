@@ -3,11 +3,12 @@ import BackendConnector from '../../../src/BackendConnector';
 import Interpolator from '../../../src/Interpolator';
 import ResourceStore from '../../../src/ResourceStore';
 import BackendMock from '../../runtime/backend/backendMock';
+import type { Services } from '../../../types';
 
 /** Those are just skipped for ci/cd, but occasionally we run them locally */
 describe('BackendConnector load retry', () => {
   /** @type {BackendConnector} */
-  let connector : BackendConnector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -15,7 +16,7 @@ describe('BackendConnector load retry', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -25,8 +26,8 @@ describe('BackendConnector load retry', () => {
   describe('#load', () => {
     it('should load data', () => {
       expect.assertions(2);
-      return new Promise((resolve) => {
-        connector.load(['en'], ['retry2'], (err) => {
+      return new Promise<void>(resolve => {
+        connector.load(['en'], ['retry2'], err => {
           expect(err).toBeFalsy();
           expect(connector.store.getResourceBundle('en', 'retry2')).toEqual({
             status: 'nok',
@@ -41,7 +42,7 @@ describe('BackendConnector load retry', () => {
 
 describe('BackendConnector load all fail - 1 namespace', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -49,7 +50,7 @@ describe('BackendConnector load all fail - 1 namespace', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -61,8 +62,8 @@ describe('BackendConnector load all fail - 1 namespace', () => {
       'should call callback on complete failure',
       () => {
         expect.assertions(2);
-        return new Promise((resolve) => {
-          connector.load(['en'], ['fail'], (err) => {
+        return new Promise<void>(resolve => {
+          connector.load(['en'], ['fail'], err => {
             expect(err).toEqual(['failed loading']);
             // expect(connector.store.getResourceBundle('en', 'fail')).toEqual({});
             expect(connector.store.getResourceBundle('en', 'fail')).toEqual(undefined);
@@ -77,7 +78,7 @@ describe('BackendConnector load all fail - 1 namespace', () => {
 
 describe('BackendConnector load all fail - 10 namespaces', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -85,7 +86,7 @@ describe('BackendConnector load all fail - 10 namespaces', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -97,7 +98,7 @@ describe('BackendConnector load all fail - 10 namespaces', () => {
       'should call callback on complete failure - taking no longer than 1 namespace',
       () => {
         expect.assertions(2);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(
             ['en'],
             [
@@ -112,7 +113,7 @@ describe('BackendConnector load all fail - 10 namespaces', () => {
               'fail9',
               'fail10',
             ],
-            (err) => {
+            err => {
               expect(err).toEqual([
                 'failed loading',
                 'failed loading',
@@ -139,7 +140,7 @@ describe('BackendConnector load all fail - 10 namespaces', () => {
 
 describe('BackendConnector load only one succeeds', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -147,7 +148,7 @@ describe('BackendConnector load only one succeeds', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -159,8 +160,8 @@ describe('BackendConnector load only one succeeds', () => {
       'should call callback',
       () => {
         expect.assertions(4);
-        return new Promise((resolve) => {
-          connector.load(['en'], ['fail', 'fail2', 'concurrently'], (err) => {
+        return new Promise<void>(resolve => {
+          connector.load(['en'], ['fail', 'fail2', 'concurrently'], err => {
             expect(err).toEqual(['failed loading', 'failed loading']);
             // expect(connector.store.getResourceBundle('en', 'fail')).toEqual({});
             expect(connector.store.getResourceBundle('en', 'fail')).toEqual(undefined);
@@ -180,7 +181,7 @@ describe('BackendConnector load only one succeeds', () => {
 });
 
 describe('BackendConnector load only one succeeds with retries', () => {
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -188,7 +189,7 @@ describe('BackendConnector load only one succeeds with retries', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -200,8 +201,8 @@ describe('BackendConnector load only one succeeds with retries', () => {
       'should call callback',
       () => {
         expect.assertions(5);
-        return new Promise((resolve) => {
-          connector.load(['en'], ['fail', 'fail2', 'concurrently', 'retry2'], (err) => {
+        return new Promise<void>(resolve => {
+          connector.load(['en'], ['fail', 'fail2', 'concurrently', 'retry2'], err => {
             expect(err).toEqual(['failed loading', 'failed loading']);
             // expect(connector.store.getResourceBundle('en', 'fail')).toEqual({});
             expect(connector.store.getResourceBundle('en', 'fail')).toEqual(undefined);
@@ -226,7 +227,7 @@ describe('BackendConnector load only one succeeds with retries', () => {
 
 describe('BackendConnector reload retry', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -234,7 +235,7 @@ describe('BackendConnector reload retry', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -254,7 +255,7 @@ describe('BackendConnector reload retry', () => {
 
 describe('BackendConnector retry with default maxRetries=5', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -262,7 +263,7 @@ describe('BackendConnector retry with default maxRetries=5', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         // retryTimeout: 350,   // This is the default value
         // maxRetries: 5,       // This is the default value
@@ -276,7 +277,7 @@ describe('BackendConnector retry with default maxRetries=5', () => {
       'retry 1 time',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry1'], () => {
             expect(connector.store.getResourceBundle('en', 'retry1')).toEqual({
               status: 'nok',
@@ -293,7 +294,7 @@ describe('BackendConnector retry with default maxRetries=5', () => {
       'retry 5 times',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry5'], () => {
             expect(connector.store.getResourceBundle('en', 'retry5')).toEqual({
               status: 'nok',
@@ -313,8 +314,8 @@ describe('BackendConnector retry with default maxRetries=5', () => {
       'fail after retrying 5 times',
       () => {
         expect.assertions(2);
-        return new Promise((resolve) => {
-          connector.load(['en'], ['retry6'], (err) => {
+        return new Promise<void>(resolve => {
+          connector.load(['en'], ['retry6'], err => {
             expect(err).toEqual(['failed loading']);
             // expect(connector.store.getResourceBundle('en', 'retry6')).toEqual({});
             expect(connector.store.getResourceBundle('en', 'retry6')).toEqual(undefined);
@@ -332,7 +333,7 @@ describe('BackendConnector retry with default maxRetries=5', () => {
 
 describe('BackendConnector retry with maxRetries=6', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -340,7 +341,7 @@ describe('BackendConnector retry with maxRetries=6', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         // retryTimeout: 350,   // This is the default value
         maxRetries: 6,
@@ -354,7 +355,7 @@ describe('BackendConnector retry with maxRetries=6', () => {
       'retry 1 time',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry1'], () => {
             expect(connector.store.getResourceBundle('en', 'retry1')).toEqual({
               status: 'nok',
@@ -371,7 +372,7 @@ describe('BackendConnector retry with maxRetries=6', () => {
       'retry 5 times',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry5'], () => {
             expect(connector.store.getResourceBundle('en', 'retry5')).toEqual({
               status: 'nok',
@@ -391,7 +392,7 @@ describe('BackendConnector retry with maxRetries=6', () => {
       'retry 6 times',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry6'], () => {
             expect(connector.store.getResourceBundle('en', 'retry6')).toEqual({
               status: 'nok',
@@ -411,8 +412,8 @@ describe('BackendConnector retry with maxRetries=6', () => {
       'fail after retrying 6 times',
       () => {
         expect.assertions(2);
-        return new Promise((resolve) => {
-          connector.load(['en'], ['retry7'], (err) => {
+        return new Promise<void>(resolve => {
+          connector.load(['en'], ['retry7'], err => {
             expect(err).toEqual(['failed loading']);
             // expect(connector.store.getResourceBundle('en', 'retry7')).toEqual({});
             expect(connector.store.getResourceBundle('en', 'retry7')).toEqual(undefined);
@@ -431,7 +432,7 @@ describe('BackendConnector retry with maxRetries=6', () => {
 // All tests have 250ms of code-execution buffer time built in.
 // To ensure test correctness, the tests should never time out.
 describe('BackendConnector retry with shorter intervals', () => {
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -439,7 +440,7 @@ describe('BackendConnector retry with shorter intervals', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         retryTimeout: 100,
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
@@ -452,7 +453,7 @@ describe('BackendConnector retry with shorter intervals', () => {
       'retry 1 time',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry1'], () => {
             expect(connector.store.getResourceBundle('en', 'retry1')).toEqual({
               status: 'nok',
@@ -471,7 +472,7 @@ describe('BackendConnector retry with shorter intervals', () => {
       'retry 5 times',
       () => {
         expect.assertions(1);
-        return new Promise((resolve) => {
+        return new Promise<void>(resolve => {
           connector.load(['en'], ['retry5'], () => {
             expect(connector.store.getResourceBundle('en', 'retry5')).toEqual({
               status: 'nok',
@@ -491,7 +492,7 @@ describe('BackendConnector retry with shorter intervals', () => {
 
 describe('BackendConnector retry with default maxRetries=0', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -499,7 +500,7 @@ describe('BackendConnector retry with default maxRetries=0', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         // retryTimeout: 350,   // This is the default value
         maxRetries: 0, // This is the default value

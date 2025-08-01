@@ -3,11 +3,12 @@ import BackendConnector from '../../../src/BackendConnector';
 import Interpolator from '../../../src/Interpolator';
 import ResourceStore from '../../../src/ResourceStore';
 import BackendMock from '../../runtime/backend/backendMock';
+import type { Services } from '../../../types';
 
 /** Those are just skipped for ci/cd, but occasionally we run them locally */
 describe('BackendConnector performance (retry) test', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -15,7 +16,7 @@ describe('BackendConnector performance (retry) test', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
