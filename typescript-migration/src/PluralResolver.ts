@@ -6,7 +6,7 @@ import type { Language, LoggerInterface } from '../types';
 import baseLogger from './logger';
 import { getCleanedCode } from './utils';
 import Logger from './logger';
-import { LanguageUtils } from './index';
+import LanguageUtils from './LanguageUtils';
 
 // Simplified: use const object instead of interface for simple mapping
 const suffixesOrder = {

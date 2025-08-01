@@ -15,7 +15,7 @@ import type {
 import { pushPath, isString, noop } from './utils';
 import baseLogger from './logger';
 import EventEmitter from './EventEmitter';
-import { ResourceStore } from './index';
+import ResourceStore from './ResourceStore';
 
 // Simplified: use simple types like original JavaScript
 type QueueItem = {

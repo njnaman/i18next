@@ -6,7 +6,7 @@ describe('i18next backend', () => {
   const i18n = i18next.createInstance();
 
   beforeAll(() => {
-    i18n.use(BackendMock).init({
+    i18n.use(new BackendMock()).init({
       fallbackLng: 'en',
       fallbackNS: 'concurrently',
       ns: [],
@@ -17,7 +17,7 @@ describe('i18next backend', () => {
   describe('loadNamespaces concurrently', () => {
     it('should load data correctly', async () => {
       let finished = 0;
-      const loadedClb = (index) => {
+      const loadedClb = (index: number) => {
         const cb = () => {
           const handlingNS = index === 1 ? 'concurrentlyLonger' : 'concurrently';
           finished += index;
