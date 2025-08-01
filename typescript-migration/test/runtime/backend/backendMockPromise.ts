@@ -26,7 +26,7 @@ class BackendMockPromise implements BackendModule {
   public services: Services | undefined; // definite assignment assertion - initialized in init
   public options: InitOptions | undefined; // definite assignment assertion - initialized in init
 
-  constructor(services: Services, options: InitOptions = {}) {
+  constructor(services?: Services, options: InitOptions = {}) {
     this.init(services, options);
   }
 

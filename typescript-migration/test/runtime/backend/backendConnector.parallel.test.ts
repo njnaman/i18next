@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vitest } from 'vitest';
 import BackendConnector from '../../../src/BackendConnector';
 import Interpolator from '../../../src/Interpolator';
 import ResourceStore from '../../../src/ResourceStore';
-import BackendMock from './backendMockSleepy';
+import BackendMockSleepy from './backendMockSleepy';
 import type { Services } from '../../../types';
 
 describe('BackendConnector with sleepy backend', () => {
@@ -12,7 +12,7 @@ describe('BackendConnector with sleepy backend', () => {
 
       beforeEach(() => {
         connector = new BackendConnector(
-          new BackendMock(),
+          new BackendMockSleepy(),
           new ResourceStore(),
           {
             interpolator: new Interpolator(),
@@ -38,8 +38,10 @@ describe('BackendConnector with sleepy backend', () => {
         expect(connector.store.getResourceBundle('en', 'namespace1')).toEqual({
           status: 'ok',
         });
-        expect(connector.backend.parallelCallsHighWaterMark).toBeLessThan(20);
-        expect(connector.backend.parallelCallsHighWaterMark).toEqual(10);
+        expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toBeLessThan(
+          20,
+        );
+        expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toEqual(10);
       });
     });
 
@@ -49,7 +51,7 @@ describe('BackendConnector with sleepy backend', () => {
 
       beforeEach(() => {
         connector = new BackendConnector(
-          new BackendMock(),
+          new BackendMockSleepy(),
           new ResourceStore(),
           {
             interpolator: new Interpolator(),
@@ -72,7 +74,7 @@ describe('BackendConnector with sleepy backend', () => {
         connector.load(['en'], namespaces, callback);
 
         await vitest.waitFor(() =>
-          expect(connector.backend.parallelCallsHighWaterMark).toEqual(20),
+          expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toEqual(20),
         );
         await vitest.waitFor(() =>
           expect(connector.store.getResourceBundle('en', 'namespace1')).toEqual({
@@ -91,7 +93,7 @@ describe('BackendConnector with sleepy backend', () => {
 
         connector.load(['en'], namespaces, callback);
         await vitest.waitFor(() =>
-          expect(connector.backend.parallelCallsHighWaterMark).toEqual(20),
+          expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toEqual(20),
         );
         await vitest.waitFor(() =>
           expect(
@@ -113,7 +115,7 @@ describe('BackendConnector with sleepy backend', () => {
 
         connector.load(['en'], namespaces, callback);
         await vitest.waitFor(() =>
-          expect(connector.backend.parallelCallsHighWaterMark).toEqual(30),
+          expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toEqual(30),
         );
         await vitest.waitFor(() =>
           expect(
@@ -137,7 +139,7 @@ describe('BackendConnector with sleepy backend', () => {
         connector.load(['en'], namespaces, callback);
 
         await vitest.waitFor(() =>
-          expect(connector.backend.parallelCallsHighWaterMark).toEqual(20),
+          expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toEqual(20),
         );
         await vitest.waitFor(() =>
           expect(connector.store.getResourceBundle('en', 'namespace1')).toEqual({
@@ -155,7 +157,7 @@ describe('BackendConnector with sleepy backend', () => {
         connector.load(['en'], namespaces, callback);
 
         await vitest.waitFor(() =>
-          expect(connector.backend.parallelCallsHighWaterMark).toEqual(20),
+          expect((connector.backend as BackendMockSleepy).parallelCallsHighWaterMark).toEqual(20),
         );
         await vitest.waitFor(() =>
           expect(connector.store.getResourceBundle('en', 'namespace1')).toEqual({

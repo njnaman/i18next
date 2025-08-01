@@ -210,10 +210,6 @@ export interface BackendModule extends BaseModule {
   readMulti?(languages: Language[], namespaces: Namespace[], callback: ReadCallback): void;
 
   save?(language: Language, namespace: Namespace, data: ResourceLanguage): void;
-
-  // Optional properties for tracking parallel calls (used in testing)
-  parallelCalls?: number;
-  parallelCallsHighWaterMark?: number;
 }
 
 // Callback types

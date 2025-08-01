@@ -3,10 +3,11 @@ import BackendConnector from '../../../src/BackendConnector';
 import Interpolator from '../../../src/Interpolator';
 import ResourceStore from '../../../src/ResourceStore';
 import BackendMock from './backendMock';
+import type { Services } from '../../../types';
 
 describe('BackendConnector performance test', () => {
   /** @type {BackendConnector} */
-  let connector;
+  let connector: BackendConnector;
 
   beforeAll(() => {
     connector = new BackendConnector(
@@ -14,7 +15,7 @@ describe('BackendConnector performance test', () => {
       new ResourceStore(),
       {
         interpolator: new Interpolator(),
-      },
+      } as Services,
       {
         backend: { loadPath: 'http://localhost:9876/locales/{{lng}}/{{ns}}.json' },
       },
@@ -29,7 +30,7 @@ describe('BackendConnector performance test', () => {
       for (let i = 0; i < 10000; i++) {
         namespaces.push(`namespace${i}`);
       }
-      connector.load(['en'], namespaces, (err) => {
+      connector.load(['en'], namespaces, err => {
         expect(err).toBeFalsy();
         expect(connector.store.getResourceBundle('en', 'namespace1')).toEqual({
           status: 'nok',

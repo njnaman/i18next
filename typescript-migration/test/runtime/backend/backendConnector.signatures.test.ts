@@ -5,10 +5,11 @@ import ResourceStore from '../../../src/ResourceStore';
 import BackendMock from './backendMock';
 import BackendMockPromise from './backendMockPromise';
 import BackendMockSync from './backendMockSync';
+import type { Services } from '../../../types';
 
 describe('BackendConnector with different signatures', () => {
   describe('BackendConnector with callback signature', () => {
-    let connector;
+    let connector: BackendConnector;
 
     beforeEach(() => {
       connector = new BackendConnector(
@@ -16,7 +17,7 @@ describe('BackendConnector with different signatures', () => {
         new ResourceStore(),
         {
           interpolator: new Interpolator(),
-        },
+        } as Services as Services,
         {},
       );
     });
@@ -25,7 +26,7 @@ describe('BackendConnector with different signatures', () => {
       it('should work as usual', () => {
         expect.assertions(2);
 
-        connector.load(['en'], ['normal'], (err) => {
+        connector.load(['en'], ['normal'], err => {
           expect(err).toEqual(undefined);
           expect(connector.store.getResourceBundle('en', 'normal')).toEqual({
             status: 'ok',
@@ -47,9 +48,9 @@ describe('BackendConnector with different signatures', () => {
           'some fallback',
           false,
           { tDescription: 'some descr' },
-          (err) => {
+          err => {
             expect(err).to.be.oneOf([null, undefined]);
-            expect(connector.backend.created).toEqual({
+            expect((connector.backend as BackendMock).created).toEqual({
               en: {
                 normal: {
                   'missing.key': {
@@ -70,15 +71,14 @@ describe('BackendConnector with different signatures', () => {
 
   describe('BackendConnector with promise signature', () => {
     /** @type {BackendConnector} */
-    let connector;
-
+    let connector: BackendConnector;
     beforeEach(() => {
       connector = new BackendConnector(
         new BackendMockPromise(),
         new ResourceStore(),
         {
           interpolator: new Interpolator(),
-        },
+        } as Services,
         {},
       );
     });
@@ -117,7 +117,7 @@ describe('BackendConnector with different signatures', () => {
         await vitest.waitFor(() => expect(callback).toHaveBeenCalled());
 
         expect(callback).toHaveBeenCalledWith(null, undefined);
-        expect(connector.backend.created).toEqual({
+        expect((connector.backend as BackendMockPromise).created).toEqual({
           en: {
             namespace2: {
               'missing.key': {
@@ -136,15 +136,14 @@ describe('BackendConnector with different signatures', () => {
 
   describe('BackendConnector with sync signature', () => {
     /** @type {BackendConnector} */
-    let connector;
-
+    let connector: BackendConnector;
     beforeEach(() => {
       connector = new BackendConnector(
         new BackendMockSync(),
         new ResourceStore(),
         {
           interpolator: new Interpolator(),
-        },
+        } as Services,
         {},
       );
     });
@@ -183,7 +182,7 @@ describe('BackendConnector with different signatures', () => {
         await vitest.waitFor(() => expect(callback).toHaveBeenCalled());
 
         expect(callback).toHaveBeenCalledWith(null, undefined);
-        expect(connector.backend.created).toEqual({
+        expect((connector.backend as BackendMockSync).created).toEqual({
           en: {
             namespace3: {
               'missing.key': {
