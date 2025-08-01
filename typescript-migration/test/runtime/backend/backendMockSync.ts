@@ -45,8 +45,8 @@ class BackendMockSync implements BackendModule {
     namespace: Namespace,
     key: string,
     fallbackValue: string,
-    callback: (err: Error | null, data?: unknown) => void,
-    options: Record<string, unknown>,
+    callback?: (err: Error | null, data?: unknown) => void,
+    options: Record<string, unknown> = {},
   ) {
     languages.forEach(l => {
       this.created[l] = this.created[l] || {};

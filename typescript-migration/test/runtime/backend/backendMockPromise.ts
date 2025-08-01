@@ -6,6 +6,7 @@ import type {
   ReadCallback,
   Services,
 } from '../../../types';
+import { noop } from '../../../src/utils';
 
 class BackendMockPromise implements BackendModule {
   public type = 'backend' as const;
@@ -59,8 +60,8 @@ class BackendMockPromise implements BackendModule {
     namespace: Namespace,
     key: string,
     fallbackValue: string,
-    callback: (err: Error | null, data?: unknown) => void,
-    options: Record<string, unknown>,
+    callback?: (err: Error | null, data?: unknown) => void,
+    options: Record<string, unknown> = {},
   ) {
     languages.forEach(l => {
       this.created[l] = this.created[l] || {};
