@@ -102,3 +102,22 @@ export type { default as LanguageUtils } from '../src/LanguageUtils.js';
 
 // Type guards and utilities from core
 export { isString, isNumber, isBoolean, isObject, isArray, isFunction, isDefined } from './core.js';
+
+// Also export common module types that tests expect
+export type {
+  BackendModule as Backend,
+  LanguageDetector as LanguageDetectorModule,
+  LanguageDetector as LanguageDetectorAsyncModule,
+  LoggerInterface as LoggerModule,
+  I18nFormat as I18nFormatModule,
+  BaseModule as ThirdPartyModule,
+  BaseModule as FormatterModule,
+} from './i18next.js';
+
+// Export WithT type for components
+export interface WithT {
+  t: TFunction;
+}
+
+// Export interpolator types that some tests expect
+export type { default as Interpolator } from '../src/Interpolator.js';

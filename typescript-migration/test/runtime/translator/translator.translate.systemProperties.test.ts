@@ -15,9 +15,8 @@ import Interpolator from '../../../src/Interpolator';
 // when a fallback is needed to find the actual definition of that property
 
 describe('Translator', () => {
-  describe('translate()', () => {
-    /** @type {Translator} */
-    let t;
+  describe('translate() - systemProperties', () => {
+    let t: Translator;
 
     beforeAll(() => {
       const rs = new ResourceStore({

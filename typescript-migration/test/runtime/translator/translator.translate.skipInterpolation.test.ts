@@ -7,9 +7,8 @@ import Interpolator from '../../../src/Interpolator';
 import PostProcessor from '../../../src/postProcessor';
 
 describe('Translator', () => {
-  describe('translate() skip interpolation', () => {
-    /** @type {Translator} */
-    let t;
+  describe('translate() - skipInterpolation', () => {
+    let t: Translator;
 
     beforeAll(() => {
       const rs = new ResourceStore({
@@ -91,7 +90,7 @@ describe('Translator', () => {
   });
 
   describe('translate() skip interpolation should allow post process', () => {
-    let t;
+    let t: Translator;
 
     beforeAll(() => {
       const rs = new ResourceStore({

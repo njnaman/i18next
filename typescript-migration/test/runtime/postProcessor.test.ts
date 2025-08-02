@@ -6,7 +6,7 @@ describe('postProcessor', () => {
     beforeAll(() => {
       postProcessor.addPostProcessor({
         name: 'dummy',
-        process: (value) => value.toUpperCase(),
+        process: (value: string) => value.toUpperCase(),
       });
     });
 

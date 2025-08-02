@@ -7,8 +7,7 @@ import Interpolator from '../../../src/Interpolator';
 
 describe('Translator', () => {
   describe('exists()', () => {
-    /** @type {Translator} */
-    let t;
+    let t: Translator;
 
     beforeAll(() => {
       const rs = new ResourceStore({

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, vi, beforeEach, afterEach } from 'vitest';
 import i18next from '../../src/i18next';
 import { get as getDefaults } from '../../src/defaults';
+import type { I18n } from '../../types';
 
 describe('i18next', () => {
   beforeAll(() => {
@@ -13,13 +14,13 @@ describe('i18next', () => {
 
   describe('instance creation', () => {
     describe('createInstance()', () => {
-      let newInstance;
+      let newInstance: I18n;
       beforeAll(() => {
         newInstance = i18next.createInstance({ bar: 'foo' });
       });
 
       it('it should not inherit options from initial i18next', () => {
-        expect(newInstance.options.bar).toBe('foo');
+        expect((newInstance.options as any).bar).toBe('foo');
       });
 
       it('it has own instance of resource store', () => {

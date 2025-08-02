@@ -3,8 +3,7 @@ import LanguageUtils from '../../src/LanguageUtils';
 
 describe('LanguageUtils', () => {
   describe('toResolveHierarchy()', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({ fallbackLng: 'en' });
     });
@@ -30,8 +29,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - extended fallback object', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: {
@@ -63,8 +61,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - fallback function returns object', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: () => ({
@@ -96,8 +93,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - fallback function returns string', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: () => 'en',
@@ -125,8 +121,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - fallback function returns array', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: () => ['de', 'en', 'zh'],
@@ -149,8 +144,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - cleanCode Option', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({ fallbackLng: 'en', cleanCode: true });
     });
@@ -174,8 +168,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - lowerCaseLng Option', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({ fallbackLng: 'en', lowerCaseLng: true });
     });
@@ -199,8 +192,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - load Option: lngOnly', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({ fallbackLng: 'en', load: 'languageOnly' });
     });
@@ -224,8 +216,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - load Option: currentOnly', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({ fallbackLng: 'en', load: 'currentOnly' });
     });
@@ -249,8 +240,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - supportedLngs', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({ fallbackLng: 'en', supportedLngs: ['nb-NO', 'de', 'en'] });
       cu.logger.debug = false; // silence
@@ -274,8 +264,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('toResolveHierarchy() - non explicit supportedLngs ', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: ['en'],
@@ -300,8 +289,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('getBestMatchFromCodes()', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: ['en'],
@@ -333,8 +321,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('getBestMatchFromCodes() with dev', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: ['fr'],
@@ -360,8 +347,7 @@ describe('LanguageUtils', () => {
   });
 
   describe('getBestMatchFromCodes() with dev and nonExplicitSupportedLngs: true', () => {
-    /** @type {LanguageUtils} */
-    let cu;
+    let cu: LanguageUtils;
     beforeAll(() => {
       cu = new LanguageUtils({
         fallbackLng: ['fr'],

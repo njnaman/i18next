@@ -22,8 +22,7 @@ describe('ResourceStore', () => {
   });
 
   describe('resource manipulation', () => {
-    /** @type {ResourceStore} */
-    let rs;
+    let rs: ResourceStore;
 
     describe('can add resources', () => {
       beforeEach(() => {

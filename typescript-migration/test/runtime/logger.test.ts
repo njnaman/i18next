@@ -4,19 +4,19 @@ import logger from '../../src/logger';
 const mockLogger = {
   type: 'logger',
 
-  log(args) {
+  log(args: any) {
     return this.output('log', args);
   },
 
-  warn(args) {
+  warn(args: any) {
     return this.output('warn', args);
   },
 
-  error(args) {
+  error(args: any) {
     return this.output('error', args);
   },
 
-  output(type, args) {
+  output(type: string, args: any) {
     return {
       type,
       args,

@@ -3,8 +3,7 @@ import Interpolator from '../../src/Interpolator';
 
 describe('Interpolator', () => {
   describe('interpolate()', () => {
-    /** @type {Interpolator} */
-    let ip;
+    let ip: Interpolator;
 
     beforeAll(() => {
       ip = new Interpolator({ interpolation: { escapeValue: false } });
@@ -430,7 +429,7 @@ describe('Interpolator', () => {
       {
         args: ['test {{test}}', { test: 'tested {{test}}' }],
         expected:
-          'test tested tested tested tested tested tested tested tested tested tested {{test}}',
+          'test tested tested tested tested tested tested tested tested tested tested tested {{test}}',
       },
     ];
 

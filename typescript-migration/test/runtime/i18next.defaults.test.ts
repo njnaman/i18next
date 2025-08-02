@@ -5,33 +5,33 @@ const defaults = defaultFc.get();
 
 describe('defaults', () => {
   it('it should have default shortcut', () => {
-    expect(defaults.overloadTranslationOptionHandler(['key', 'my default value'])).toEqual({
+    expect(defaults.overloadTranslationOptionHandler?.(['key', 'my default value'])).toEqual({
       defaultValue: 'my default value',
     });
   });
 
   it('defaultValue as option', () => {
     expect(
-      defaults.overloadTranslationOptionHandler(['key', { defaultValue: 'option default value' }]),
+      defaults.overloadTranslationOptionHandler?.(['key', { defaultValue: 'option default value' }]),
     ).toEqual({ defaultValue: 'option default value' });
   });
 
   it('description', () => {
     expect(
-      defaults.overloadTranslationOptionHandler(['key', 'my default value', 'the description']),
+      defaults.overloadTranslationOptionHandler?.(['key', 'my default value', 'the description']),
     ).toEqual({ defaultValue: 'my default value', tDescription: 'the description' });
   });
 
   it('description with options defaultValue', () => {
     // Options overwrites params default value
     expect(
-      defaults.overloadTranslationOptionHandler(['key', 'my default value', 'the description']),
+      defaults.overloadTranslationOptionHandler?.(['key', 'my default value', 'the description']),
     ).toEqual({ defaultValue: 'my default value', tDescription: 'the description' });
   });
 
   it('interpolation', () => {
     expect(
-      defaults.overloadTranslationOptionHandler([
+      defaults.overloadTranslationOptionHandler?.([
         'key',
         'my default value {{params}}',
         { params: 'the value' },
@@ -42,7 +42,7 @@ describe('defaults', () => {
   it('interpolation with options defaultValue', () => {
     // Options overwrites params default value
     expect(
-      defaults.overloadTranslationOptionHandler([
+      defaults.overloadTranslationOptionHandler?.([
         'key',
         'my default value {{params}}',
         { defaultValue: 'options default value', params: 'the value' },
@@ -52,7 +52,7 @@ describe('defaults', () => {
 
   it('interpolation description', () => {
     expect(
-      defaults.overloadTranslationOptionHandler([
+      defaults.overloadTranslationOptionHandler?.([
         'key',
         'my default value {{params}}',
         'the description',
@@ -68,7 +68,7 @@ describe('defaults', () => {
   it('interpolation description with options defaultValue', () => {
     // Options overwrites params default value
     expect(
-      defaults.overloadTranslationOptionHandler([
+      defaults.overloadTranslationOptionHandler?.([
         'key',
         'my default value {{params}}',
         'the description',
@@ -82,6 +82,6 @@ describe('defaults', () => {
   });
 
   it('it should have default format function', () => {
-    expect(defaults.interpolation.format('my value', '###', 'de')).toBe('my value');
+    expect(defaults.interpolation?.format?.('my value', '###', 'de')).toBe('my value');
   });
 });

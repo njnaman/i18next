@@ -1,15 +1,13 @@
-import { describe, it, expect, vitest, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import Translator from '../../../src/Translator';
 import ResourceStore from '../../../src/ResourceStore';
 import LanguageUtils from '../../../src/LanguageUtils';
 import PluralResolver from '../../../src/PluralResolver';
 import Interpolator from '../../../src/Interpolator';
-import logger from '../../../src/logger';
 
 describe('Translator', () => {
-  describe('translate() with returnObjects=true', () => {
-    /** @type {Translator} */
-    let t;
+  describe('translate() - returnObject', () => {
+    let t: Translator;
 
     beforeAll(() => {
       const rs = new ResourceStore({

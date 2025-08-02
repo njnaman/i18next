@@ -1,53 +1,46 @@
-import { describe, it, expect, vitest, beforeEach } from 'vitest';
-import Interpolator from '../../../src/Interpolator';
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
+import Translator from '../../../src/Translator';
+import ResourceStore from '../../../src/ResourceStore';
 import LanguageUtils from '../../../src/LanguageUtils';
 import PluralResolver from '../../../src/PluralResolver';
-import ResourceStore from '../../../src/ResourceStore';
-import Translator from '../../../src/Translator';
+import Interpolator from '../../../src/Interpolator';
 
 const NB_PLURALS_ARABIC = 6;
 
 const NB_PLURALS_ENGLISH_ORDINAL = 4;
 
 describe('Translator', () => {
-  /** @type {Translator} */
-  let t;
-  /** @type {import('i18next').Services} */
-  let tServices;
-  /** @type {unknown} */
-  let missingKeyHandler;
+  describe('translate() - missing', () => {
+    let t: Translator;
 
-  beforeEach(() => {
-    const rs = new ResourceStore({
-      en: {
-        translation: {
-          test: 'test_en',
-          deep: {
-            test: 'deep_en',
+    beforeAll(() => {
+      const rs = new ResourceStore({
+        en: {
+          translation: {
+            test: 'test_en',
+            deep: {
+              test: 'deep_en',
+            },
           },
         },
-      },
-      de: {
-        translation: {
-          test: 'test_de',
+        de: {
+          translation: {
+            test: 'test_de',
+          },
         },
-      },
-    });
+      });
 
-    const lu = new LanguageUtils({ fallbackLng: 'en' });
+      const lu = new LanguageUtils({ fallbackLng: 'en' });
 
-    tServices = {
-      resourceStore: rs,
-      languageUtils: lu,
-      pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
-      interpolator: new Interpolator(),
-    };
+      const tServices = {
+        resourceStore: rs,
+        languageUtils: lu,
+        pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
+        interpolator: new Interpolator(),
+      };
 
-    missingKeyHandler = vitest.fn();
-  });
+      const missingKeyHandler = vitest.fn();
 
-  describe('translate() saveMissing', () => {
-    beforeEach(() => {
       t = new Translator(tServices, {
         defaultNS: 'translation',
         ns: 'translation',
@@ -86,6 +79,33 @@ describe('Translator', () => {
       return defaultValue || key;
     };
     beforeEach(() => {
+      const rs = new ResourceStore({
+        en: {
+          translation: {
+            test: 'test_en',
+            deep: {
+              test: 'deep_en',
+            },
+          },
+        },
+        de: {
+          translation: {
+            test: 'test_de',
+          },
+        },
+      });
+
+      const lu = new LanguageUtils({ fallbackLng: 'en' });
+
+      const tServices = {
+        resourceStore: rs,
+        languageUtils: lu,
+        pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
+        interpolator: new Interpolator(),
+      };
+
+      const missingKeyHandler = vitest.fn();
+
       t = new Translator(tServices, {
         defaultNS: 'translation',
         ns: 'translation',
@@ -114,6 +134,33 @@ describe('Translator', () => {
 
   describe('translate() saveMissing with saveMissingPlurals options', () => {
     beforeEach(() => {
+      const rs = new ResourceStore({
+        en: {
+          translation: {
+            test: 'test_en',
+            deep: {
+              test: 'deep_en',
+            },
+          },
+        },
+        de: {
+          translation: {
+            test: 'test_de',
+          },
+        },
+      });
+
+      const lu = new LanguageUtils({ fallbackLng: 'en' });
+
+      const tServices = {
+        resourceStore: rs,
+        languageUtils: lu,
+        pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
+        interpolator: new Interpolator(),
+      };
+
+      const missingKeyHandler = vitest.fn();
+
       t = new Translator(tServices, {
         defaultNS: 'translation',
         ns: 'translation',
@@ -151,6 +198,33 @@ describe('Translator', () => {
 
   describe('translate() saveMissing with saveMissingPlurals and defaults', () => {
     beforeEach(() => {
+      const rs = new ResourceStore({
+        en: {
+          translation: {
+            test: 'test_en',
+            deep: {
+              test: 'deep_en',
+            },
+          },
+        },
+        de: {
+          translation: {
+            test: 'test_de',
+          },
+        },
+      });
+
+      const lu = new LanguageUtils({ fallbackLng: 'en' });
+
+      const tServices = {
+        resourceStore: rs,
+        languageUtils: lu,
+        pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
+        interpolator: new Interpolator(),
+      };
+
+      const missingKeyHandler = vitest.fn();
+
       t = new Translator(tServices, {
         defaultNS: 'translation',
         ns: 'translation',
@@ -207,6 +281,33 @@ describe('Translator', () => {
 
   describe('translate() saveMissing with saveMissingPlurals options (ordinal)', () => {
     beforeEach(() => {
+      const rs = new ResourceStore({
+        en: {
+          translation: {
+            test: 'test_en',
+            deep: {
+              test: 'deep_en',
+            },
+          },
+        },
+        de: {
+          translation: {
+            test: 'test_de',
+          },
+        },
+      });
+
+      const lu = new LanguageUtils({ fallbackLng: 'en' });
+
+      const tServices = {
+        resourceStore: rs,
+        languageUtils: lu,
+        pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
+        interpolator: new Interpolator(),
+      };
+
+      const missingKeyHandler = vitest.fn();
+
       t = new Translator(tServices, {
         defaultNS: 'translation',
         ns: 'translation',
@@ -250,6 +351,33 @@ describe('Translator', () => {
 
   describe('translate() saveMissing with saveMissingPlurals and defaults (ordinal)', () => {
     beforeEach(() => {
+      const rs = new ResourceStore({
+        en: {
+          translation: {
+            test: 'test_en',
+            deep: {
+              test: 'deep_en',
+            },
+          },
+        },
+        de: {
+          translation: {
+            test: 'test_de',
+          },
+        },
+      });
+
+      const lu = new LanguageUtils({ fallbackLng: 'en' });
+
+      const tServices = {
+        resourceStore: rs,
+        languageUtils: lu,
+        pluralResolver: new PluralResolver(lu, { prepend: '_', simplifyPluralSuffix: true }),
+        interpolator: new Interpolator(),
+      };
+
+      const missingKeyHandler = vitest.fn();
+
       t = new Translator(tServices, {
         defaultNS: 'translation',
         ns: 'translation',

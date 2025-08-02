@@ -58,14 +58,15 @@ class I18n extends EventEmitter implements I18nInterface {
   private _services: Services = {} as Services;
   private _modules: Modules = { external: [] };
   private _store: I18nInterface['store'];
-  private _language: Language = '';
-  private _languages: Language[] = [];
+  private _language: Language | undefined;
+  private _languages: Language[] | undefined;
   private _resolvedLanguage?: Language | undefined;
   private _isInitialized: boolean = false;
   private _isInitializing: boolean = false;
   private _initializedStoreOnce: boolean = false;
   private _initializedLanguageOnce: boolean = false;
   private _format: FormatFunction = (value: unknown) => String(value);
+  private _logger: typeof baseLogger;
   private translator: Translator;
   private isLanguageChangingTo?: Language | undefined;
 
@@ -74,6 +75,7 @@ class I18n extends EventEmitter implements I18nInterface {
 
     this._options = transformOptions(options);
     this._services = {} as Services;
+    this._logger = baseLogger;
     this._modules = { external: [] };
 
     // Initialize store and translator to avoid definite assignment errors
@@ -98,39 +100,55 @@ class I18n extends EventEmitter implements I18nInterface {
   get options(): InitOptions {
     return this._options;
   }
+
   get services(): Services {
     return this._services;
   }
+
   get logger(): typeof baseLogger {
-    return baseLogger;
+    return this._logger;
   }
+
+  set logger(newLogger: typeof baseLogger) {
+    this._logger = newLogger;
+  }
+
   get modules(): Modules {
     return this._modules;
   }
+
   get store(): I18nInterface['store'] {
     return this._store;
   }
+
   get language(): Language {
-    return this._language;
+    return this._language || '';
   }
+
   get languages(): Language[] {
-    return this._languages;
+    return this._languages || [];
   }
+
   get resolvedLanguage(): Language | undefined {
     return this._resolvedLanguage;
   }
+
   get isInitialized(): boolean {
     return this._isInitialized;
   }
+
   get isInitializing(): boolean {
     return this._isInitializing;
   }
+
   get initializedStoreOnce(): boolean {
     return this._initializedStoreOnce;
   }
+
   get initializedLanguageOnce(): boolean {
     return this._initializedLanguageOnce;
   }
+
   get format(): FormatFunction {
     return this._format;
   }
@@ -213,7 +231,7 @@ class I18n extends EventEmitter implements I18nInterface {
         this._options as any,
       ) as I18nInterface['store'];
 
-      const s = this._services as any;
+      const s = this._services;
       s.logger = baseLogger;
       s.resourceStore = this._store;
       s.languageUtils = lu;
@@ -334,7 +352,7 @@ class I18n extends EventEmitter implements I18nInterface {
         actualCallback(err || null, undefined);
       };
       // fix for use cases when calling changeLanguage before finished to initialized (i.e. https://github.com/i18next/i18next/issues/1552)
-      if (this._languages && !this._isInitialized) return finish(null, this.t);
+      if (this._languages && !this._isInitialized) return finish(null, this.t.bind(this));
       this.changeLanguage(this._options.lng, finish as any);
     };
 
@@ -756,7 +774,7 @@ class I18n extends EventEmitter implements I18nInterface {
     const actualLng =
       lng ||
       this._resolvedLanguage ||
-      (this._languages?.length > 0 ? this._languages[0] : this._language);
+      (this._languages && this._languages.length > 0 ? this._languages[0] : this._language);
     if (!actualLng) return 'rtl';
 
     try {
@@ -849,41 +867,42 @@ class I18n extends EventEmitter implements I18nInterface {
 
   cloneInstance(options: CloneOptions = {}, callback: Callback = noop): I18nInterface {
     const forkResourceStore = options.forkResourceStore;
-    if (forkResourceStore) delete (options as any).forkResourceStore;
+    if (forkResourceStore) delete options.forkResourceStore;
     const mergedOptions = { ...this._options, ...options, ...{ isClone: true } };
     const clone = new I18n(mergedOptions);
     if (options.debug !== undefined || (options as any).prefix !== undefined) {
-      (clone as any).logger = (clone as any).logger.clone(options);
+      clone.logger = clone.logger.clone(options);
     }
     const membersToCopy = ['store', 'services', 'language'];
     membersToCopy.forEach(m => {
-      (clone as any)[`_${m}`] = (this as any)[`_${m}`];
+      // @ts-ignore
+      clone[`_${m}`] = this[`_${m}`];
     });
-    (clone as any)._services = { ...this._services };
-    (clone as any)._services.utils = {
+    clone._services = { ...this._services };
+    clone._services.utils = {
       hasLoadedNamespace: clone.hasLoadedNamespace.bind(clone),
     };
     if (forkResourceStore) {
       // faster than const clonedData = JSON.parse(JSON.stringify(this.store.data))
-      const clonedData = Object.keys((this._store as any).data).reduce((prev: any, l) => {
-        prev[l] = { ...(this._store as any).data[l] };
+      const clonedData = Object.keys(this._store.data).reduce((prev: any, l) => {
+        prev[l] = { ...this._store.data[l] };
         prev[l] = Object.keys(prev[l]).reduce((acc: any, n) => {
           acc[n] = { ...prev[l][n] };
           return acc;
         }, prev[l]);
         return prev;
       }, {});
-      (clone as any)._store = new ResourceStore(
+      clone._store = new ResourceStore(
         clonedData,
         mergedOptions as any,
       ) as I18nInterface['store'];
-      (clone as any)._services.resourceStore = (clone as any)._store;
+      clone._services.resourceStore = clone._store;
     }
-    (clone as any).translator = new Translator(
-      (clone as any)._services as unknown as TranslatorServices,
+    clone.translator = new Translator(
+      clone._services as unknown as TranslatorServices,
       mergedOptions as unknown as TranslatorOptions,
     );
-    (clone as any).translator.on('*', (...args: unknown[]) => {
+    clone.translator.on('*', (...args: unknown[]) => {
       clone.emit(args[0] as string, ...args.slice(1));
     });
     clone.init(mergedOptions, callback);
@@ -900,8 +919,8 @@ class I18n extends EventEmitter implements I18nInterface {
     return {
       options: this._options,
       store: (this._store as any).data,
-      language: this._language,
-      languages: [...this._languages],
+      language: this._language || '',
+      languages: [...this._languages || []],
       resolvedLanguage: this._resolvedLanguage || '',
     };
   }

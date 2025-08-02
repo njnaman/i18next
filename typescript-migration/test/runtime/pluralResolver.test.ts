@@ -4,8 +4,7 @@ import LanguageUtils from '../../src/LanguageUtils';
 
 describe('PluralResolver', () => {
   describe('getRule()', () => {
-    /** @type {PluralResolver} */
-    let pr;
+    let pr: PluralResolver;
     beforeAll(() => {
       const lu = new LanguageUtils({ fallbackLng: 'en' });
       pr = new PluralResolver(lu, {});

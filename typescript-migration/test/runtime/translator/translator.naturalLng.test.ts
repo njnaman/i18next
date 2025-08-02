@@ -1,11 +1,15 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import i18next from '../../../src/i18next';
-
-const instance = i18next.createInstance();
+import Translator from '../../../src/Translator';
+import ResourceStore from '../../../src/ResourceStore';
+import LanguageUtils from '../../../src/LanguageUtils';
+import PluralResolver from '../../../src/PluralResolver';
+import Interpolator from '../../../src/Interpolator';
 
 describe('Translator', () => {
-  describe('translate() with natural language', () => {
-    beforeAll(async () => {
+  describe('naturalLng', () => {
+    let t: Translator;
+
+    beforeAll(() => {
       await instance.init({
         lng: 'en',
         fallbackLng: 'en',

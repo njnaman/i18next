@@ -6,9 +6,8 @@ import PluralResolver from '../../../src/PluralResolver';
 import Interpolator from '../../../src/Interpolator';
 
 describe('Translator', () => {
-  describe('translate() un/escape', () => {
-    /** @type {Translator} */
-    let t;
+  describe('translate() - escape', () => {
+    let t: Translator;
 
     beforeAll(() => {
       const rs = new ResourceStore({

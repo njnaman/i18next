@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import i18next from '../../src/i18next';
+import type { BaseModule, TFunction } from '../../types';
+
+// Define the I18nFormat interface for testing
+interface TestI18nFormat extends BaseModule {
+  type: 'i18nFormat';
+
+  parse(res: string, options: Record<string, unknown>): string;
+}
 
 const instance = i18next.createInstance();
 
@@ -38,15 +46,15 @@ describe('extendTranslation', () => {
       },
     ];
 
-    tests.forEach((test) => {
+    tests.forEach(test => {
       it(`it ${test.name}`, () => {
         instance
           .use({
             type: 'i18nFormat',
-            parse: (_res, options) => {
+            parse: (_res: string, options: Record<string, unknown>) => {
               expect(options).to.deep.equals(test.expected);
             },
-          })
+          } as TestI18nFormat)
           .init(
             {
               lng: 'en',
@@ -61,8 +69,8 @@ describe('extendTranslation', () => {
                 },
               },
             },
-            (err, t) => {
-              t('translation:test1', test.options);
+            (err: Error | null, t: Function | undefined | void) => {
+              t?.('translation:test1', test.options);
             },
           );
       });

@@ -238,8 +238,8 @@ export interface I18n extends EventEmitterInterface {
   services: Services;
   modules: Modules;
   store: ResourceStore;
-  language: Language;
-  languages: Language[];
+  language: Language | undefined;
+  languages: Language[] | undefined;
   resolvedLanguage?: Language | undefined;
   isInitialized: boolean;
   isInitializing: boolean;
@@ -347,10 +347,10 @@ export interface CloneOptions extends InitOptions {
 // I18n state for serialization
 export interface I18nState {
   options: InitOptions;
-  store: Resource;
-  language: Language;
-  languages: Language[];
-  resolvedLanguage?: Language;
+  store: Record<string, any>;
+  language: Language | undefined;
+  languages: Language[] | undefined;
+  resolvedLanguage: Language;
 }
 
 // Static methods

@@ -49,7 +49,7 @@ describe('i18next.interpolation.nesting', () => {
         },
       },
     });
-    instance.services.formatter.add('customdDateFormatter', (value, lng) => `${value} | ${lng}`);
+    instance.services.formatter?.add('customdDateFormatter', (value, lng) => `${value} | ${lng}`);
   });
 
   describe('nesting', () => {

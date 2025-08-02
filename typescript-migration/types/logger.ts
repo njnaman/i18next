@@ -19,12 +19,6 @@ export interface LoggerInterface {
   error(...args: LogArgs): void;
 }
 
-// Extended logger interface for testing
-export interface TestLoggerInterface extends LoggerInterface {
-  type?: string;
-  output(type: LogLevel, args: LogArgs): void;
-}
-
 // Logger options
 export type LoggerOptions = {
   prefix?: string;
