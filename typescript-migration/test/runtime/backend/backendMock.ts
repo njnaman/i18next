@@ -2,7 +2,6 @@ import type {
   BackendModule,
   InitOptions,
   Language,
-  MultiReadCallback,
   Namespace,
   ReadCallback,
   ResourceLanguage,
@@ -94,14 +93,18 @@ class BackendMock implements BackendModule {
     const language = languages[0];
     const namespace = namespaces[0];
 
+    if (!language || !namespace) {
+      return callback('Language or namespace not provided', false);
+    }
+
     if (!this.retries[language]) this.retries[language] = 0;
 
-    if (namespace === 'retry2' && this.retries[language] < 2) {
-      this.retries[language]++;
+    if (namespace === 'retry2' && this.retries[language]! < 2) {
+      this.retries[language]!++;
       return callback('failed loading', true);
     }
     callback(null, {
-      [language]: { [namespace]: { status: 'nok', retries: this.retries[language] } },
+      [language]: { [namespace]: { status: 'nok', retries: this.retries[language]! } },
     });
     delete this.retries[language];
   }
