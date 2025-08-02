@@ -8,15 +8,15 @@ import { isString } from './utils';
 class ConsoleLogger implements LoggerInterface {
   public type = 'logger';
 
-  log(args: LogArgs): void {
+  log(...args: LogArgs): void {
     this.output('log', args);
   }
 
-  warn(args: LogArgs): void {
+  warn(...args: LogArgs): void {
     this.output('warn', args);
   }
 
-  error(args: LogArgs): void {
+  error(...args: LogArgs): void {
     this.output('error', args);
   }
 
@@ -47,31 +47,26 @@ class Logger implements LoggerInterface {
     this.options = options;
     this.debug = options.debug || false;
   }
-  log(...args: LogArgs): void | LoggerInterface {
+  log(...args: LogArgs): void {
     return this.forward(args, 'log', '', true);
   }
 
-  warn(...args: LogArgs): void | LoggerInterface {
+  warn(...args: LogArgs): void {
     return this.forward(args, 'warn', '', true);
   }
 
-  error(...args: LogArgs): void | LoggerInterface {
+  error(...args: LogArgs): void {
     return this.forward(args, 'error', '');
   }
 
-  deprecate(...args: LogArgs): void | LoggerInterface {
+  deprecate(...args: LogArgs): void {
     return this.forward(args, 'warn', 'WARNING DEPRECATED: ', true);
   }
 
-  forward(
-    args: LogArgs,
-    lvl: LogLevel,
-    prefix: string,
-    debugOnly?: boolean,
-  ): void | LoggerInterface {
-    if (debugOnly && !this.debug) return undefined;
+  forward(args: LogArgs, lvl: LogLevel, prefix: string, debugOnly?: boolean): void {
+    if (debugOnly && !this.debug) return;
     if (isString(args[0])) args[0] = `${prefix}${this.prefix} ${args[0]}`;
-    return this.logger[lvl](args);
+    this.logger[lvl](...args);
   }
 
   create(moduleName: string): Logger {
